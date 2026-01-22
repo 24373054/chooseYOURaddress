@@ -1,6 +1,7 @@
 # gen.py - 生成基准钥匙
 import os
 import binascii
+import json
 try:
     from coincurve import PublicKey
 except ImportError:
@@ -16,10 +17,20 @@ base_priv_hex = binascii.hexlify(base_priv_bytes).decode()
 public_key_bytes = PublicKey.from_secret(base_priv_bytes).format(compressed=False)[1:]
 public_key_hex = binascii.hexlify(public_key_bytes).decode()
 
+# 保存到文件以便自动化脚本使用
+data = {
+    "base_private_key": f"0x{base_priv_hex}",
+    "base_public_key": public_key_hex
+}
+with open("key_data.json", "w") as f:
+    json.dump(data, f, indent=2)
+
 print("\n" + "="*50)
 print("🔑 第一步：保存好你的基准私钥 (千万别丢，别给别人看)")
 print(f"基准私钥: 0x{base_priv_hex}")
 print("-" * 50)
 print("🖥️  第二步：把下面这个公钥复制到 GPU 命令的 -z 后面")
 print(f"基准公钥: {public_key_hex}")
-print("="*50 + "\n")
+print("="*50)
+print("✅ 密钥数据已保存到 key_data.json")
+print()
