@@ -1,0 +1,16 @@
+# 忽略编译文件
+*.o
+*.bin
+profanity2.x64
+profanity2.x64.exe
+Makefile
+
+# 忽略系统缓存
+.DS_Store
+__pycache__/
+*.pyc
+
+# ⚠️ 再次防止私钥脚本被上传
+calc_final.py
+gen.py
+verify.py
