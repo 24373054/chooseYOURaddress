@@ -731,23 +731,16 @@ __kernel void profanity_score_matching(__global mp_number * const pInverse, __gl
     const size_t id = get_global_id(0);
     __global const uchar * const hash = pInverse[id].d;
 
-    // --- [Matrix Perfect Patch] ---
-    
-    // 1. 检查前缀: dac (0xda, 0xc...)
-    bool match_prefix = (hash[0] == 0xda) && ((hash[1] & 0xF0) == 0xc0);
-    
-    // 2. 检查后缀: 31ec7 (...3, 1e, c7)
-    bool match_suffix = (hash[19] == 0xc7) && (hash[18] == 0x1e) && ((hash[17] & 0x0F) == 0x03);
-
+    // --- [Dynamic Matching Patch] ---
+    // 前缀: 9999
+    // 后缀: 99
+    bool match_prefix = (hash[0] == 0x99) && (hash[1] == 0x99);
+    bool match_suffix = (hash[19] == 0x99);
     if (match_prefix && match_suffix) {
-        // 只有前后都匹配，才给满分上报
         profanity_result_update(id, hash, pResult, 20, scoreMax);
     }
-    
-    // 其他情况直接丢弃，不给 CPU 任何负担
     // --- [End Patch] ---
 }
-
 __kernel void profanity_score_leading(__global mp_number * const pInverse, __global result * const pResult, __constant const uchar * const data1, __constant const uchar * const data2, const uchar scoreMax) {
 	const size_t id = get_global_id(0);
 	__global const uchar * const hash = pInverse[id].d;

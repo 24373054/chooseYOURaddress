@@ -10,6 +10,20 @@ Makefile
 __pycache__/
 *.pyc
 
+# ⚠️ 敏感文件 - 包含私钥和地址信息，严禁上传！
+# 密钥和结果文件
+key_data.json
+gpu_result.json
+final_result.json
+address_config.json
+
+# 备份文件
+*.backup
+matrix.cl.backup
+
+# OpenCL 缓存文件（可能包含编译后的内核）
+cache-opencl.*
+
 # ⚠️ 再次防止私钥脚本被上传
 calc_final.py
 gen.py
